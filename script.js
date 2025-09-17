@@ -1,46 +1,41 @@
-//your code here
- let DataUser = {};
+let DataUser = {};
 
-    function fetchUser(){
-        fetch('https://randomuser.me/api/')
-        .then(response => response.json())
-        .then(data =>{
+function fetchUser(){
+    fetch('https://randomuser.me/api/')
+    .then(response => response.json())
+    .then(data => {
+        const user = data.results[0];
 
-             const user = data.results[0];
+        DataUser.title = `${user.name.first} ${user.name.last}`;
+        DataUser.age = user.dob.age;
+        DataUser.email = user.email;
+        DataUser.phone = user.phone;
+        DataUser.picture = user.picture.large;
 
-             DataUser.title =`${user.name.title} ${user.name.first} ${user.name.last}`;
-                   DataUser.age = user.dob.age;
-                   DataUser.email = user.email;
-                   DataUser.phone = user.phone;
-                   DataUser.picture = user.picture.large;
+        document.getElementById("userImage").src = DataUser.picture;
+        document.getElementById("title").innerText = DataUser.title;
 
-                   document.getElementById("useImage").src = DataUser.picture;
-                    document.getElementById("title").innerText= DataUser.title;
-        })
-            .catch(error => console.error("Error fetching user:", error));
+        // Clear previous additional info
+        document.getElementById("additional-info").innerText = "";
+    })
+    .catch(error => console.error("Error fetching user:", error));
 }
+
+// Fetch first user on page load
+fetchUser();
+
+// GET ANOTHER USER button
+document.getElementById("getUser").addEventListener("click", () => {
     fetchUser();
-
-document.getElementById("btn-new").addEventListener("click", () => {
-    fetchUser(); 
-   document.getElementById("input").style.display = "none";
 });
 
-
-
-document.getElementById("btn-age").addEventListener("click", () => {
- const input = document.getElementById("input");
-    input.style.display = "block"; 
-    input.value = DataUser.age;
-
+// Show Age, Email, or Phone in additional-info
+document.querySelector('button[data-attr="age"]').addEventListener("click", () => {
+    document.getElementById("additional-info").innerText = `${DataUser.age}`;
 });
-document.getElementById("btn-email").addEventListener("click", () => {
-const input = document.getElementById("input");
-    input.style.display = "block";
-    input.value = DataUser.email;
+document.querySelector('button[data-attr="email"]').addEventListener("click", () => {
+    document.getElementById("additional-info").innerText = `${DataUser.email}`;
 });
-document.getElementById("btn-phone").addEventListener("click", () => {
-  const input = document.getElementById("input");
-    input.style.display = "block";
-    input.value = DataUser.phone;
+document.querySelector('button[data-attr="phone"]').addEventListener("click", () => {
+    document.getElementById("additional-info").innerText = ` ${DataUser.phone}`;
 });
